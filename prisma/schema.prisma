@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Company {
+  id          String    @id @default(uuid())
+  userId      String    @unique
+  companyname String
+  industry    String?
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  internships Internship[]
+}
+
+model Student {
+  id             String  @id @default(uuid())
+  userId         String  @unique
+  firstname      String
+  lastname       String
+  university     String?
+  course         String?
+  level          String?
+  specialty      String?
+  resumeUrl      String?     
+  resumeId       String?     
+  user           User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  applications   Application[]
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  password      String?
+  isVerified    Boolean  @default(false)
+  isNewUser     Boolean  @default(true)
+  role          Role
+  profileUrl    String?
+  profileId     String?
+  address       String?
+  linkedin      String?
+  github        String?
+  website       String?
+  refreshToken  String?
+  googleId      String?
+  about         String?
+  company       Company?
+  student       Student?
+}
+
+enum Role {
+  STUDENT
+  COMPANY
+}
+
+model Internship {
+  id                    String    @id @default(uuid())
+  companyId             String
+  title                 String
+  description           String
+  responsibilities      String
+  requirements          String?
+  benefits              String?
+  shortlisted           Boolean    @default(false)
+  type                  String
+  duration              String
+  deadline              DateTime
+  company               Company     @relation(fields: [companyId], references: [id])
+
+  applications          Application[]
+}
+
+
+model Application {
+  id             String        @id @default(uuid())
+  internshipId   String
+  studentId      String
+
+  student        Student       @relation(fields: [studentId], references: [id])
+  internship     Internship    @relation(fields: [internshipId], references: [id], onDelete: Cascade)
+  @@unique(fields: [studentId, internshipId], name: "studentId_internshipId")
+}

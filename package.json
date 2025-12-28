@@ -1,0 +1,54 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "A server project startup for all my projects.",
+  "homepage": "https://github.com/gitmarah/startup#readme",
+  "bugs": {
+    "url": "https://github.com/gitmarah/startup/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gitmarah/startup.git"
+  },
+  "license": "ISC",
+  "author": "Abubakarr Marah",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc --watch",
+    "dev": "nodemon dist/index.js"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.1.0",
+    "@prisma/client": "^7.1.0",
+    "bcryptjs": "^3.0.2",
+    "cloudinary": "^2.8.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.1",
+    "multer": "^2.0.2",
+    "nodemailer": "^7.0.10",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "prisma": "^7.1.0",
+    "streamifier": "^0.1.1",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.5",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/morgan": "^1.9.10",
+    "@types/multer": "^2.0.0",
+    "@types/nodemailer": "^7.0.3",
+    "@types/passport": "^1.0.17",
+    "@types/passport-google-oauth20": "^2.0.17",
+    "@types/streamifier": "^0.1.2",
+    "supabase": "^2.63.1"
+  }
+}
