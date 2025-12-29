@@ -90,7 +90,6 @@ export const getInternship = async (req: Request, res: Response) => {
 
 export const getInternshipsByCompany = async (req: Request, res: Response) => {
     const companyId = req.params.id;
-    console.log(companyId);
     if(!companyId) return res.status(400).json({ message: "Company Id is required!" });
     const foundInternships = await prisma.internship.findMany({ where: { companyId}, include: { company: { include: { user: true } } } });
     if(foundInternships.length < 1) return res.status(404).json([]);

@@ -77,7 +77,8 @@ export const signin = async (req: Request, res: Response) => {
 
     try{await prisma.user.update({ where: { email }, data: { refreshToken } });}
     catch(err) {return res.status(500).json({ message: "Couldn't save refresh token!" })}
-    res.cookie("jwt", refreshToken, { httpOnly: true, secure: false, sameSite: "lax", maxAge: 24 * 60 * 60 * 1000 });
+    if(process.env.DEV_TYPE === "PROD") res.cookie("jwt", refreshToken, { httpOnly: true, secure: true, sameSite: "none", maxAge: 24 * 60 * 60 * 1000 });
+    else res.cookie("jwt", refreshToken, { httpOnly: true, secure: false, sameSite: "lax", maxAge: 24 * 60 * 60 * 1000 });
     return res.status(200).json({ user: payload, token: accessToken })}
 
 
@@ -196,8 +197,9 @@ export const googleCallback = async (req: Request, res: Response) => {
         where: { id: user.id },
         data: { refreshToken }
     });
-
-    res.cookie("jwt", refreshToken, { httpOnly: true, secure: false, sameSite: "lax", maxAge: 24 * 60 * 60 * 1000 });
+    if(process.env.DEV_TYPE === "PROD") res.cookie("jwt", refreshToken, { httpOnly: true, secure: true, sameSite: "none", maxAge: 24 * 60 * 60 * 1000 });
+    else res.cookie("jwt", refreshToken, { httpOnly: true, secure: false, sameSite: "lax", maxAge: 24 * 60 * 60 * 1000 });
+    
     res.redirect(`${process.env.CLIENT_URL}/googleoauth?token=${accessToken}`); }
 
 
@@ -248,16 +250,6 @@ export const getUserAndAccessToken = async (req: Request, res: Response) => {
             process.env.ACCESS_TOKEN!,
             { expiresIn: "30m" }
         );
-
-        // const refreshToken = jwt.sign(
-        //     payload,
-        //     process.env.REFRESH_TOKEN!,
-        //     { expiresIn: "1d" }
-        // );
-        // await prisma.user.update({ where: { id: foundUser.id }, data: { refreshToken } });
-
-        // res.cookie("jwt", refreshToken, { httpOnly: true, secure: false, sameSite: "lax", maxAge: 24 * 60 * 60 * 1000 });
-        // res.cookie("jwt", refreshToken, { httpOnly: true, secure: true, sameSite: "none", maxAge: 24 * 60 * 60 * 1000 });
         return res.status(200).json({ token: accessToken, user: foundUser });
     } catch (error) {
         return res.status(403).json({ message: "Invalid or expired token!" });

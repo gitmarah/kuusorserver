@@ -97,7 +97,6 @@ export const uploadResume = async (req: Request, res: Response) => {
         } else {
             result = await handleUpload(req.file.buffer, "resumes", null);
         } 
-        console.log(result);     
 
         if(result?.secure_url && result?.public_id){
             try{

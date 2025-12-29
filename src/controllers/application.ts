@@ -117,12 +117,9 @@ export const shortlistApplicants = async (req: Request, res: Response) => {
     if (!Array.isArray(applicants) || applicants.length === 0) return res.status(400).json({ message: "No applicants to shortlist!" });
     const internship = await prisma.internship.findUnique({ where: { id: internshipId }, include: { company: { include: { user: true } } } });
     if(!internship?.company) return res.status(500).json({ message: "Server Error: Unable to fetch internship!" });
-    console.log(applicants);
     try {
         for(const id of applicants){
-            console.log(id)
             const student = await prisma.student.findUnique({ where: { id }, include: { user: true } });
-            console.log(student);
             if(!student?.user) return res.status(500).json({ message: "Server Error: Unable to fetch student!" });
             const details = {
                 email: student?.user.email,
