@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import { prisma } from "../config/connectDB.js";
 import { sendShortlistEmail } from "../utils/emails.js";
 import { format } from "date-fns";
+import type { Application } from "@prisma/client";
 
 export const internshipApplication = async (req: Request, res: Response) => {
     const { internshipId, studentId } = req.body;
@@ -52,7 +53,7 @@ export const getApplicationsByStudent = async (req: Request, res: Response) => {
     try{
         const foundApplications = await prisma.application.findMany({ where: { studentId }, include: { student: true, internship: { include: { company: { include: { user: true } } } } } });
         if(foundApplications.length < 1) return res.status(200).json([]);
-        const applications = foundApplications.map(application => {
+        const applications = foundApplications.map((application) => {
             if(application.internship.shortlisted === false) return ({
             internship: {companyname: application.internship.company.companyname,
                 profileUrl: application.internship.company.user.profileUrl,

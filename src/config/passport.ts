@@ -13,7 +13,7 @@ passport.use(new GoogleStrategy({
     passReqToCallback: true,
 }, async (req, _accessToken: string, _refreshToken: string, profile: Profile, done: VerifyCallback) => {
     try{
-        let user;
+        let user: User | object = {};
         let foundUser;
         const state = req.query.state ? JSON.parse(req.query.state as string) : {};
         const role = state.role || "STUDENT";
@@ -23,7 +23,7 @@ passport.use(new GoogleStrategy({
                 where: { email: foundUser.email },
                 data: { googleId: profile.id },
                 include: { student: true, company: true }
-            })
+            });
         }
         if(!foundUser && profile.emails){
             if(role === "STUDENT"){
@@ -51,9 +51,8 @@ passport.use(new GoogleStrategy({
                         isVerified: true
                     },
                     include: { company: true }
-                }) as User;                
+                });                
             }
-
         }
         done(null, user);
     } catch(error){
