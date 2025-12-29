@@ -9,7 +9,7 @@ configDotenv();
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID!,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    callbackURL: `${process.env.DEV_TYPE === "PROD" ? "https://kuusor.onrender.com" : "http://localhost/api/v1"}/auth/google/callback`,
+    callbackURL: `${process.env.DEV_TYPE === "PROD" ? "https://kuusor.onrender.com/api.v1" : "http://localhost/api/v1"}/auth/google/callback`,
     passReqToCallback: true,
 }, async (req, _accessToken: string, _refreshToken: string, profile: Profile, done: VerifyCallback) => {
     try{
