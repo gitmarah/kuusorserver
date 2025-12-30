@@ -53,8 +53,8 @@ export const getApplicationsByStudent = async (req: Request, res: Response) => {
     try{
         const foundApplications = await prisma.application.findMany({ where: { studentId }, include: { student: true, internship: { include: { company: { include: { user: true } } } } } });
         if(foundApplications.length < 1) return res.status(200).json([]);
-        const applications = foundApplications.map((application) => {
-            if(application.internship.shortlisted === false) return ({
+        const applications = foundApplications.filter(application => !application.internship.shortlisted)
+        .map((application) => ({
             internship: {companyname: application.internship.company.companyname,
                 profileUrl: application.internship.company.user.profileUrl,
                 address: application.internship.company.user.address,
@@ -68,7 +68,8 @@ export const getApplicationsByStudent = async (req: Request, res: Response) => {
             studentId: application.studentId,
             internshipId: application.internshipId,
             student: application.student,
-        })});
+        }));
+        console.log(applications);
         return res.status(200).json(applications);      
     } catch(err){
         return res.status(500).json({ message: "Server error: Unable to get applications!" });
