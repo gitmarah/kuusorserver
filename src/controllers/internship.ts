@@ -93,7 +93,7 @@ export const getInternshipsByCompany = async (req: Request, res: Response) => {
     if(!companyId) return res.status(400).json({ message: "Company Id is required!" });
     const foundInternships = await prisma.internship.findMany({ where: { companyId}, include: { company: { include: { user: true } } } });
     if(foundInternships.length < 1) return res.status(404).json([]);
-    const internships = foundInternships.map(internship => ({
+    const internships = foundInternships.sort((a, b) => Number(Boolean(a.shortlisted)) - Number(Boolean(b.shortlisted))).map(internship => ({
         companyname: internship.company.companyname,
         profileUrl: internship.company.user.profileUrl,
         address: internship.company.user.address,

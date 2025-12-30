@@ -83,7 +83,7 @@ export const getApplicationsByInternship = async (req: Request, res: Response) =
     try{
         const foundApplications = await prisma.application.findMany({ where: { internshipId }, include: { student: { include:{ user: true }}, internship: true } });
         if(foundApplications.length < 1) return res.status(200).json([]);
-        const applications = foundApplications.map(application => ({
+        const applications = foundApplications.sort((a, b) => Number(Boolean(b.student.resumeUrl)) - Number(Boolean(a.student.resumeUrl))).map(application => ({
             internship: application.internship,
             id: application.id,
             studentId: application.studentId,
@@ -96,7 +96,8 @@ export const getApplicationsByInternship = async (req: Request, res: Response) =
                 university: application.student.university,
                 course: application.student.course,
                 address: application.student.user.address,
-                profileUrl: application.student.user.profileUrl
+                profileUrl: application.student.user.profileUrl,
+                resumeUrl: application.student.resumeUrl,
             }
         }));
         return res.status(200).json(applications);      
