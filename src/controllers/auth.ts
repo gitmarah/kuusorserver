@@ -250,7 +250,7 @@ export const getUserAndAccessToken = async (req: Request, res: Response) => {
             process.env.ACCESS_TOKEN!,
             { expiresIn: "30m" }
         );
-        return res.status(200).json({ token: accessToken, user: foundUser });
+        return res.status(200).json({ token: accessToken, user: payload });
     } catch (error) {
         return res.status(403).json({ message: "Invalid or expired token!" });
     }
